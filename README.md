@@ -34,3 +34,50 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+## Project Structure
+
+```
+/Listenum
+├── public/                      # Static assets (images, fonts, etc.)
+├── src/
+│   ├── app/                     # Next.js App Router structure
+│   │   ├── layout.tsx           # Global layout (Header/Footer)
+│   │   ├── page.tsx             # Homepage
+│   │   ├── practice/            # Practice page (was practice.tsx)
+│   │   │   ├── page.tsx
+│   │   │   ├── loading.tsx
+│   │   │   ├── error.tsx
+│   │   │   ├── layout.tsx
+│   │   │   └── analytics/page.tsx  # Example sub-route
+│   │   ├── api/                 # API routes (new structure)
+│   │   │   ├── tts/route.ts
+│   │   │   ├── analytics/route.ts
+│   │
+│   ├── components/              # Reusable UI components
+│   │   ├── PlaybackControls.tsx # Play, pause, and replay buttons
+│   │   └── Layout.tsx           # Common layout (header, footer, etc.)
+│   │
+│   ├── hooks/                   # Custom React hooks
+│   │   └── usePracticeStats.ts  # For aggregating user practice data
+│   │
+│   ├── services/                # Integration with external services
+│   │   ├── ttsService.ts        # Wrapper for TTS API calls
+│   │   └── analyticsService.ts  # Functions for logging and fetching practice data
+│   │
+│   ├── lib/                     # Utility functions
+│   │   └── generateRandomNumber.ts  # Generate random numbers/dates
+│   │
+│   ├── styles/                  # Global styles, CSS modules, or Tailwind CSS config
+│   │   └── globals.css
+│   │
+│   └── types/                   # Custom TypeScript type definitions
+│       └── index.ts
+├── .env                         # Environment variables
+├── package.json                 # Project configuration
+└── tsconfig.json                # TypeScript configuration
+
+```
+
