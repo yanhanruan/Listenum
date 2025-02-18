@@ -11,7 +11,8 @@
         "name": "Next.js: debug client-side",
         "type": "chrome",
         "request": "launch",
-        "url": "http://localhost:3000"
+        "url": "http://localhost:3000",
+        "userDataDir": "C:\\Users\\12850\\AppData\\Local\\Google\\Chrome\\User Data\\Default"
       },
     //   {
     //     "name": "Next.js: debug client-side (Firefox)",
@@ -40,6 +41,12 @@
           "uriFormat": "%s",
           "webRoot": "${workspaceFolder}"
         }
+      },
+      {
+        "name": "Next.js: attach to Chrome",
+        "type": "chrome",
+        "request": "attach",
+        "port": 9222
       }
     ]
   }
