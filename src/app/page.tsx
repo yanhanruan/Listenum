@@ -66,13 +66,13 @@ export default function ListenumApp() {
         <h1 className="text-3xl font-semibold mb-8 text-[#141414]">Listen to the number and type it out</h1>
 
         <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
-          {/* <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Listenum-9BjMYlTNvLnL1WlajLT6dlvv9gvwnb.png"
+          <Image
+            src="/images/studying.png"
             alt="Illustration of a person wearing headphones"
             width={400}
             height={300}
             className="rounded-lg"
-          /> */}
+          />
           <div>
             <h2 className="text-4xl font-bold mb-6 text-[#141414]">4, 7, 2, 9, 1, 6</h2>
             <div className="flex gap-2">

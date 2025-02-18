@@ -70,13 +70,13 @@ export default function ProfilePage() {
                         {recentPractice.map((practice) => (
                             <div key={practice.id} className="flex items-center justify-between">
                                 <div className="flex items-center gap-1">
-                                    {/* <Image
-                                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Listenum-9BjMYlTNvLnL1WlajLT6dlvv9gvwnb.png"
+                                    <Image
+                                        src="/images/studying.png"
                                         alt="Practice thumbnail"
                                         width={16}
                                         height={16}
                                         className="rounded-sm"
-                                    /> */}
+                                    />
                                     <div className="text-[10px]">Listening Numbers</div>
                                 </div>
                                 <div className="text-[10px] font-semibold">{practice.accuracy}</div>
