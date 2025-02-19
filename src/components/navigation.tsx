@@ -29,7 +29,9 @@ export default function Navigation() {
                     </div>
                     <div className="flex items-center gap-4">
                         <Button className="bg-[#789978] hover:bg-[#779977] text-white rounded-full px-6">Become a member</Button>
-                        <div className="w-8 h-8 rounded-full bg-[#e5e8eb]" />
+                        <Link href="/profile">
+                            <div className="w-8 h-8 rounded-full bg-[#e5e8eb]" />
+                        </Link>
                     </div>
                 </div>
             </div>
