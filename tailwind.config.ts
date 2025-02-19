@@ -11,6 +11,9 @@ export default {
 	theme: {
 		extend: {
 			colors: {
+				wakabaGreen: 'rgb(119, 153, 119)',
+				sakiBlue: 'rgba(119, 153, 204, 0.34)',
+				soyoYellow: 'rgba(255, 221, 136, 0.07)',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {
