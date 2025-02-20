@@ -35,8 +35,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
-
 ## Project Structure
 
 ```
@@ -57,6 +55,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 │   │   │   ├── analytics/route.ts
 │   │
 │   ├── components/              # Reusable UI components
+│   │   ├── ui/                  # reusable shadcn components
+│   │   │   ├── input.tsx        # add by shadcn
 │   │   ├── PlaybackControls.tsx # Play, pause, and replay buttons
 │   │   └── Layout.tsx           # Common layout (header, footer, etc.)
 │   │
@@ -81,3 +81,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ```
 
+## Commit Principle
+
+* `feat: Implement user authentication`
+* `fix: Resolve issue with form submission`
+* `docs: Update API documentation`
+* `style: Improve code formatting`

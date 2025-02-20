@@ -66,7 +66,7 @@ export default function AudioControls() {
       </Button>
 
       <Button size="icon" variant="ghost" className="text-[#789978]" onClick={handleReplay}>
-        <RotateCcw className="w-6 h-6 fill-current" />
+        <RotateCcw className="w-6 h-6 " />
       </Button>
     </div>
   );

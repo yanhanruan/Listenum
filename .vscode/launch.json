@@ -12,7 +12,8 @@
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:3000",
-        "userDataDir": "C:\\Users\\12850\\AppData\\Local\\Google\\Chrome\\User Data\\Default"
+        "userDataDir": "C:\\Users\\12850\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+        "sourceMaps": true
       },
     //   {
     //     "name": "Next.js: debug client-side (Firefox)",
