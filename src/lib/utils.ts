@@ -6,13 +6,18 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getRandomNumber(minDigits: number, maxDigits: number, decimalPlaces: number = 0): number {
-  if (minDigits > maxDigits) {
-    throw new Error('Minimum digits cannot be greater than maximum digits');
+  if (minDigits > maxDigits) throw new Error('Minimum digits cannot be greater than maximum digits');
+
+  const min = 10 ** (minDigits - 1);
+  const max = 10 ** maxDigits - 1;
+  const num = Math.random() * (max - min + 1) + min;
+
+  if (decimalPlaces) {
+    const result = num.toFixed(decimalPlaces);
+    return parseFloat(result.endsWith('0') ? result.slice(0, -1) + (Math.floor(Math.random() * 9) + 1) : result);
   }
-  const min = Math.pow(10, minDigits - 1);
-  const max = Math.pow(10, maxDigits) - 1;
-  const randomNum = Math.random() * (max - min + 1) + min;
-  return decimalPlaces > 0 ? Number(randomNum.toFixed(decimalPlaces)) : Math.floor(randomNum);
+
+  return Math.floor(num);
 }
 
 export function getRandomDate(): Date {
@@ -21,5 +26,3 @@ export function getRandomDate(): Date {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
-console.log(getRandomNumber(1,2,3));
-console.log(12345);
