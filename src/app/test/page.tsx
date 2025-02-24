@@ -1,31 +1,8 @@
 "use client";
 import AudioControls from "@/components/audio-controls";
-import { browserDefaultSpeech } from "@/lib/tts";
+import { generateSpeech } from "@/services/ttsService";
+
 import { useEffect, useState } from "react";
-
-// function synthesizeSpeech(text: string, lang = "zh-CN"): void {
-//   if ("speechSynthesis" in window) {
-//     const synth = window.speechSynthesis;
-//     synth.cancel(); // Prevent overlapping speech
-
-//     const utterance = new SpeechSynthesisUtterance(text);
-//     utterance.lang = lang;
-
-//     // Ensure voices are loaded before speaking
-//     const voices = synth.getVoices();
-//     if (voices.length === 0) {
-//       synth.onvoiceschanged = () => {
-//         utterance.voice = synth.getVoices().find((v) => v.lang === lang) || null;
-//         synth.speak(utterance);
-//       };
-//     } else {
-//       utterance.voice = voices.find((v) => v.lang === lang) || null;
-//       synth.speak(utterance);
-//     }
-//   } else {
-//     console.error("The current browser does not support speech synthesis");
-//   }
-// }
 
 export default function Home() {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -33,10 +10,11 @@ export default function Home() {
   const handleSpeak = () => {
     if (!isSpeaking) {
       setIsSpeaking(true);
-      browserDefaultSpeech("123456","en-US");
+      // browserDefaultSpeech("123456","en-US");
       setTimeout(() => setIsSpeaking(false), 1000); // Prevent spam clicking
     }
   };
+
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">

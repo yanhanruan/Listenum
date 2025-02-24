@@ -23,7 +23,7 @@ export const getAvailableLanguages = async () =>
 export const getVoicesForLanguage = async (lang: string) => 
     (await getVoicesByLanguage()).filter((v) => v.lang === lang);
 
-export async function speakText(text: string, lang = "en-US", voiceURI?: string) {
+export async function speakWithBrowserTTS(text: string, lang = "en-US", voiceURI?: string) {
     if (!("speechSynthesis" in window)) {
         console.error("Browser TTS not supported");
         return;

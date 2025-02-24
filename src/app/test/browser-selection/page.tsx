@@ -1,4 +1,4 @@
-// TODO wrap with tailwind css
+// TODO wrap with tailwind css and complete the options for users
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { getAvailableLanguages, getVoicesForLanguage, speakText } from "@/lib/tts/browser";
