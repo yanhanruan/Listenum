@@ -26,3 +26,26 @@ export function getRandomDate(): Date {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
+export function debounce<T extends (...args: any[]) => void>(
+  func: T, wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
+export function throttle<T extends (...args: any[]) => void>(
+  func: T, limit: number
+): (...args: Parameters<T>) => void {
+  let lastCall = 0;
+  return (...args: Parameters<T>) => {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      func(...args);
+    }
+  };
+}
+

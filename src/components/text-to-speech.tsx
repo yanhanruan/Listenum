@@ -9,17 +9,22 @@ const TextToSpeech = () => {
     const synthesizeSpeech = async () => {
         setIsLoading(true);
         try {
-            // FIXME 404 Not Found
-            const response = await fetch('/services/polly', {
+            const response = await fetch('/api/polly', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text }),
             });
 
-            if (!response.ok) throw new Error('Request failed');
+            if (!response.ok) {
+                const errorData = await response.json(); // Assuming the backend returns JSON when errors.
+                throw new Error(errorData.message || 'Request failed');
+            }
 
-            const { url } = await response.json();
-            setAudioUrl(url);
+            // Audio stream process
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            setAudioUrl(audioUrl);
+
         } catch (error) {
             console.error('Error:', error);
             alert('Error generating speech');
@@ -33,7 +38,7 @@ const TextToSpeech = () => {
             <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="输入要转换的文本"
+                placeholder="Enter the text to be converted."
                 rows={5}
             />
 
@@ -41,13 +46,13 @@ const TextToSpeech = () => {
                 onClick={synthesizeSpeech}
                 disabled={isLoading || !text.trim()}
             >
-                {isLoading ? '生成中...' : '生成语音'}
+                {isLoading ? 'Generating...' : 'Generate Speech'}
             </button>
 
             {audioUrl && (
                 <audio controls autoPlay key={audioUrl}>
                     <source src={audioUrl} type="audio/mpeg" />
-                    您的浏览器不支持音频播放
+                    Your browser does not support audio playback
                 </audio>
             )}
 
