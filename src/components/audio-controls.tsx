@@ -4,7 +4,11 @@ import { useRef, useState } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react"; // Assuming you're using Lucide icons
 import { Button } from "@/components/ui/button"; // Adjust this import if needed
 
-export default function AudioControls() {
+type Props = {
+  audioUrl: string | null;
+};
+
+export default function AudioControls({ audioUrl }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -40,11 +44,11 @@ export default function AudioControls() {
     <div className="bg-[#f2f2f2] p-4 rounded-lg flex items-center gap-4">
       <audio
         ref={audioRef}
-        src="/audio/sleepy-rain.mp3"
+        src={audioUrl}
         preload="auto"
         onTimeUpdate={handleTimeUpdate}
       />
-      
+
       <div className="w-12 h-12 bg-[#e5e8eb] rounded-lg flex items-center justify-center">
         <div className="w-6 h-6 bg-[#141414] rounded" />
       </div>
