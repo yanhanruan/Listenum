@@ -8,7 +8,7 @@ export default function Home() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   useEffect(() => {
     const fetchAudio = async () => {
-      const url = await awsPolly("12345");
+      const url = await awsPolly("666");
       setAudioUrl(url);
     };
     fetchAudio();
