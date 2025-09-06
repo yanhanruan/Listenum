@@ -1,62 +1,72 @@
-"use client"
+"use client";
 
-import { useState, useCallback, useEffect } from "react" // 1. Import useEffect
-import AudioControls from "@/components/audio-controls"
-import { usePolly } from "@/hooks/usePolly"
-import TabsSelector from "./components/TabsSelector"
-import NumberInput from "./components/NumberInput"
-import Illustration from "@/components/illustration"
-import { generateRandomNumber } from "@/lib/utils"
-
-
-
-// convert number to intermmittent speech text
-// const numberToSpeechText = (number: string): string => {
-//   return number.split('').join(', ');
-// };
+import { useState, useCallback, useEffect, useRef } from "react";
+import AudioControls, { AudioControlsHandle } from "@/components/audio-controls";
+import { usePolly } from "@/hooks/usePolly";
+import TabsSelector from "./components/TabsSelector";
+import NumberInput from "./components/NumberInput";
+import Illustration from "@/components/illustration";
+import { generateRandomNumber } from "@/lib/utils";
 
 export default function ListenumApp() {
-  const [inputValue, setInputValue] = useState("")
-  // 2. Initialize with a neutral, non-random value
+  const [inputValue, setInputValue] = useState("");
   const [currentNumber, setCurrentNumber] = useState("");
   const [tabValue, setTabValue] = useState("number");
+  const audioControlsRef = useRef<AudioControlsHandle>(null);
 
-  // 3. Generate the number client-side after the initial render
-  useEffect(() => {
-    // This code only runs in the browser, not on the server.
-    generateNewNumber();
-  }, []); // The empty array [] ensures this runs only once on mount
+  // Ref to track if the initial audio has been handled to prevent autoplay on load.
+  const hasHandledFirstAudio = useRef(false);
 
-  // Pass an empty string if currentNumber isn't ready yet to avoid errors
-  const audioUrl = usePolly(currentNumber || "");
+  const { audioUrl, isLoading } = usePolly(currentNumber);
 
   const generateNewNumber = useCallback(() => {
     const newNumber = generateRandomNumber();
     setCurrentNumber(newNumber);
-    setInputValue(""); // 清空输入框
+    setInputValue("");
   }, []);
+  
+  // Generate the first number on component mount.
+  useEffect(() => {
+    generateNewNumber();
+  }, [generateNewNumber]);
 
+  // Handles autoplay for new audio clips.
+  useEffect(() => {
+    if (audioUrl && !isLoading) {
+      // Skip the very first audio clip to prevent autoplay on initial load.
+      if (!hasHandledFirstAudio.current) {
+        hasHandledFirstAudio.current = true;
+        return;
+      }
+      
+      // Autoplay subsequent audio clips (e.g., after a correct answer).
+      audioControlsRef.current?.play();
+    }
+  }, [audioUrl, isLoading]);
+
+  // Checks the user's answer.
   const handleCheck = useCallback(() => {
     const isCorrect = inputValue.trim() === currentNumber;
-    
+
     if (isCorrect) {
-      // 显示正确提示，然后生成新数字
+      // After a correct answer, generate a new number, which triggers the autoplay effect.
       setTimeout(() => {
         generateNewNumber();
-      }, 1500); // 1.5秒后生成新数字
+      }, 1500);
+    } else {
+      // If incorrect, replay the current audio.
+      audioControlsRef.current?.replay();
     }
-    
+
     return isCorrect;
   }, [inputValue, currentNumber, generateNewNumber]);
-
-  // Optional: You can add a loading state to prevent a flash of content
+  
   if (!currentNumber) {
-    return null; // or a loading spinner <Spinner />
+    return null;
   }
 
   return (
     <>
-      {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         <TabsSelector value={tabValue} onChange={setTabValue} />
 
@@ -66,19 +76,22 @@ export default function ListenumApp() {
 
         <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
           <Illustration />
-          <NumberInput 
-            value={inputValue} 
-            onChange={setInputValue} 
+          <NumberInput
+            value={inputValue}
+            onChange={setInputValue}
             onCheck={handleCheck}
-            currentNumber={currentNumber} 
+            currentNumber={currentNumber}
           />
         </div>
 
-        {/* Audio Player */}
         <div className="bg-[#f2f2f2] p-1 rounded-lg flex items-center gap-4">
-          <AudioControls audioUrl={audioUrl} />
+          <AudioControls
+            ref={audioControlsRef}
+            audioUrl={audioUrl}
+            isLoading={isLoading}
+          />
         </div>
       </main>
     </>
-  )
+  );
 }
