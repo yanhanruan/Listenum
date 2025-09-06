@@ -51,7 +51,7 @@ export function throttle<T extends (...args: any[]) => void>(
 
 // generate random number
 export const generateRandomNumber = (): string => {
-  const digits = Math.floor(Math.random() * 5) + 1; // 1到5位数
+  const digits = Math.floor(Math.random() * 5) + 1; // 1-5 digits
   const max = Math.pow(10, digits) - 1;
   const min = digits === 1 ? 1 : Math.pow(10, digits - 1);
   return Math.floor(Math.random() * (max - min + 1) + min).toString();

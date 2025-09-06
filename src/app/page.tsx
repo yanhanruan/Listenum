@@ -10,10 +10,10 @@ import { generateRandomNumber } from "@/lib/utils"
 
 
 
-// 数字转换为语音文本的函数
-const numberToSpeechText = (number: string): string => {
-  return number.split('').join(', ');
-};
+// convert number to intermmittent speech text
+// const numberToSpeechText = (number: string): string => {
+//   return number.split('').join(', ');
+// };
 
 export default function ListenumApp() {
   const [inputValue, setInputValue] = useState("")
@@ -28,7 +28,7 @@ export default function ListenumApp() {
   }, []); // The empty array [] ensures this runs only once on mount
 
   // Pass an empty string if currentNumber isn't ready yet to avoid errors
-  const audioUrl = usePolly(currentNumber ? numberToSpeechText(currentNumber) : "");
+  const audioUrl = usePolly(currentNumber || "");
 
   const generateNewNumber = useCallback(() => {
     const newNumber = generateRandomNumber();
