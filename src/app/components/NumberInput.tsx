@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react"; // 1. Import useEffect
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast"; // 1. Import the useToast hook
+import { useToast } from "@/hooks/use-toast";
 import { Search } from "lucide-react";
 
 type Props = {
@@ -15,16 +15,21 @@ type Props = {
 
 export default function NumberInput({ value, onChange, onCheck, currentNumber }: Props) {
   const [isChecking, setIsChecking] = useState(false);
-  const { toast } = useToast(); // 2. Get the toast function from the hook
+  const { toast } = useToast();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isChecking) {
+      inputRef.current?.focus();
+    }
+  }, [isChecking]);
 
   const handleCheck = async () => {
     setIsChecking(true);
     
-    // Short delay for UI feedback
     setTimeout(() => {
       const isCorrect = onCheck();
 
-      // 3. Call toast with an object configuration
       if (isCorrect) {
         toast({
           variant:"success",
@@ -34,7 +39,7 @@ export default function NumberInput({ value, onChange, onCheck, currentNumber }:
         });
       } else {
         toast({
-          variant: "destructive", // Use the destructive variant for errors
+          variant: "destructive",
           title: "Wrong! 😔",
           description: "Try again! Listen carefully to the audio.",
           duration: 2000,
@@ -42,6 +47,7 @@ export default function NumberInput({ value, onChange, onCheck, currentNumber }:
       }
 
       setIsChecking(false);
+      
     }, 300);
   };
 
@@ -61,6 +67,7 @@ export default function NumberInput({ value, onChange, onCheck, currentNumber }:
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
+            ref={inputRef} // 
             type="text"
             placeholder="Type the number here"
             value={value}
