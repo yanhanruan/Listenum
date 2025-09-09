@@ -49,46 +49,74 @@ export class BrowserProvider implements TTSProvider {
   }
 
   // 实际播放语音的方法
-  async playDirect(
-    text: string, 
-    options: TTSOptions = {},
-    callbacks?: {
-      onStart?: () => void;
-      onEnd?: () => void;
-      onError?: (error: Error) => void;
-    }
-  ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.stop(); // 停止当前播放
+ async playDirect(
+  text: string,
+  options: TTSOptions = {},
+  callbacks?: {
+    onStart?: () => void;
+    onEnd?: () => void;
+    onError?: (error: Error) => void;
+  }
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    this.stop(); // 停止当前播放
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = options.lang || 'en-US';
-      utterance.rate = options.playbackRate || 1;
-      
-      if (this.voices.length > 0) {
-        const voice = this.voices.find(v => v.voiceURI === options.voice) || this.voices[0];
-        utterance.voice = voice;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = options.playbackRate || 1;
+
+    // 设置语言（作为 fallback）
+    const targetLang = options.lang || 'en-US';
+    utterance.lang = targetLang;
+
+    // 优先根据 lang 匹配 voice
+    if (this.voices.length > 0) {
+      let voice: SpeechSynthesisVoice | undefined;
+
+      if (options.voice) {
+        // 如果用户传了 voice，优先按 voiceURI 找
+        voice = this.voices.find(v => v.voiceURI === options.voice);
       }
 
-      utterance.onstart = () => {
-        callbacks?.onStart?.();
-      };
+      if (!voice) {
+        // 没有指定 voice，就按语言找
+        voice = this.voices.find(v => v.lang === targetLang);
+      }
 
-      utterance.onend = () => {
+      if (!voice) {
+        // 退一步，尝试按语言前缀找（比如 en-US / en-GB 都算英文）
+        voice = this.voices.find(v => v.lang.startsWith(targetLang.split('-')[0]));
+      }
+
+      // 实在没有，就 fallback 到第一个
+      utterance.voice = voice || this.voices[0];
+    }
+
+    utterance.onstart = () => {
+      callbacks?.onStart?.();
+    };
+
+    utterance.onend = () => {
+      callbacks?.onEnd?.();
+      resolve();
+    };
+
+    utterance.onerror = (event) => {
+      if (event.error === 'interrupted') {
+        // 把中断当成正常结束，不报错
         callbacks?.onEnd?.();
         resolve();
-      };
+        return;
+      }
+      const error = new Error(`Speech synthesis error: ${event.error}`);
+      callbacks?.onError?.(error);
+      reject(error);
+    };
 
-      utterance.onerror = (event) => {
-        const error = new Error(`Speech synthesis error: ${event.error}`);
-        callbacks?.onError?.(error);
-        reject(error);
-      };
+    this.currentUtterance = utterance;
+    window.speechSynthesis.speak(utterance);
+  });
+}
 
-      this.currentUtterance = utterance;
-      window.speechSynthesis.speak(utterance);
-    });
-  }
 
   pause(): void {
     window.speechSynthesis.pause();

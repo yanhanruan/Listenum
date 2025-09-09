@@ -246,10 +246,14 @@ export default function EnhancedListenumApp() {
   const [currentNumber, setCurrentNumber] = useState("");
   const [tabValue, setTabValue] = useState("number");
   const audioControlsRef = useRef<AudioControlsHandle>(null);
+
+  // ✅ 步骤 1: 在组件顶层定义语言状态
+  const [lang, setLang] = useState('en-US'); // 默认为美式英语
+
   
   // 使用数据管理hooks
   const numberInput = useNumberInput();
-  const { audioUrl, ttsResult, audioStore, regenerateAudio } = useEnhancedTTS(currentNumber);
+  const { audioUrl, ttsResult, audioStore, regenerateAudio } = useEnhancedTTS(currentNumber,{lang} );
   
   // 用于跟踪是否是首次加载，防止自动播放
   const hasHandledFirstAudio = useRef(false);
